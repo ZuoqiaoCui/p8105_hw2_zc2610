@@ -8,6 +8,7 @@ output: github_document
 ```{r}
 library(tidyverse)
 library(readxl)
+library(dplyr)
 ```
 ## Problem 2
 
@@ -56,6 +57,13 @@ The total weight of trash collected by Professor Trash Wheel is `r sum(Professor
 The total number of sports balls collected by Mr. Trash Wheel in 2020 is `r sum(filter(MrTrashWheel_df,year == 2020)$sports_balls)`
 
 ## Problem 3
+
+```{r}
+pols_month_df = 
+    read_csv("./data/fivethirtyeight_datasets/pols-month.csv") %>% 
+    janitor::clean_names() %>% 
+    separate(mon,into = c("year","month","day"),sep = "-")
+```
 
 
 
