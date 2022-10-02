@@ -15,7 +15,7 @@ Import, clean, and organize the data for Mr Trash Wheel
 
 ```{r}
 MrTrashWheel_df = 
-    read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2.xlsx") %>% 
+    read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2.xlsx",sheet = "Mr. Trash Wheel",range = "A2:N534") %>% 
     janitor::clean_names() %>% 
     drop_na(dumpster) %>% 
     mutate(
@@ -26,13 +26,24 @@ Import, clean, and organize the data for Professor Trash Wheel
 
 ```{r}
 ProfessorTrashWheel_df = 
-    read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2.xlsx",sheet = "Professor Trash Wheel") %>% 
+    read_excel("./data/Trash-Wheel-Collection-Totals-7-2020-2.xlsx",sheet = "Professor Trash Wheel",range = "A2:N116") %>% 
     janitor::clean_names() %>% 
     drop_na(dumpster) %>% 
     mutate(
       sports_balls = as.integer(round(sports_balls))
     )
 ```
+
+Combine two sheets
+
+```{r}
+MrTrashWheel_df = MrTrashWheel_df %>% 
+ mutate(type = "Mr. Trash Wheel")
+ProfessorTrashWheel_df = ProfessorTrashWheel_df %>% 
+  mutate(type = "Professor Trash Wheel")
+TrashWheel_tidy = bind_rows(MrTrashWheel_df,ProfessorTrashWheel_df)
+```
+
 
 
 
