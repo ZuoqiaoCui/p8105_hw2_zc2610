@@ -47,17 +47,54 @@ ProfessorTrashWheel_df = ProfessorTrashWheel_df %>%
 TrashWheel_tidy = bind_rows(MrTrashWheel_df,ProfessorTrashWheel_df) %>% 
   janitor::clean_names()
 ```
+Number of observations and variables in Mr Trash Wheel dataset
+```{r}
+num_of_MrTrashWheel_observations = nrow(MrTrashWheel_df)
+num_of_MrTrashWheel_variables = ncol(MrTrashWheel_df)
+num_of_MrTrashWheel_observations
+num_of_MrTrashWheel_variables
+```
+
+Number of observations and variables in Mr Trash Wheel dataset
+```{r}
+num_of_ProfessorTrashWheel_observations = nrow(ProfessorTrashWheel_df)
+num_of_ProfessorTrashWheel_variables = ncol(ProfessorTrashWheel_df)
+num_of_ProfessorTrashWheel_observations
+num_of_ProfessorTrashWheel_variables
+```
+
+Number of observations and variables in Mr Trash_tidy date frame
+```{r}
+num_of_TrashWheel_tidy_observations = nrow(TrashWheel_tidy) 
+num_of_TrashWheel_tidy_variables = ncol(TrashWheel_tidy)
+num_of_TrashWheel_tidy_observations
+num_of_TrashWheel_tidy_variables
+```
+Calculate the total weight of trash collected by professor trash wheel
+```{r}
+professor_total_weight = sum(filter(TrashWheel_tidy,type == "Professor Trash Wheel")$weight_tons)
+professor_total_weight
+```
+
+Calculate the total number of sports bals collected by Mr trash wheel
+```{r}
+Mr_total_sportsballs = sum(filter(TrashWheel_tidy,year == 2020)$sports_balls)
+Mr_total_sportsballs
+```
+
 
 Description
 There are totally `r nrow(MrTrashWheel_df)` observations and `r ncol(MrTrashWheel_df)` variables in the Mr Trash Wheel dataset. 
 There are totally `r nrow(ProfessorTrashWheel_df)` observations and `r ncol(ProfessorTrashWheel_df)` variables in the Professor Trash Wheel dataset. 
 There are totally `r nrow(TrashWheel_tidy)` observations and `r ncol(TrashWheel_tidy)` variables in the final combined dataset. 
 Key variables contain "dumpster","year","weight_tons","sports_balls" and so on.
-The total weight of trash collected by Professor Trash Wheel is `r sum(ProfessorTrashWheel_df$weight_tons)`
-The total number of sports balls collected by Mr. Trash Wheel in 2020 is `r sum(filter(MrTrashWheel_df,year == 2020)$sports_balls)`
+The total weight of trash collected by Professor Trash Wheel is `r sum(filter(TrashWheel_tidy,type == "Professor Trash Wheel")$weight_tons)`
+The total number of sports balls collected by Mr. Trash Wheel in 2020 is `r sum(filter(TrashWheel_tidy,year == 2020)$sports_balls)`
 
 ## Problem 3
 
+1. Separate date into year, month and day
+2. Replace month number with month name
 ```{r}
 pols_month_df = 
     read_csv("./data/fivethirtyeight_datasets/pols-month.csv") %>% 
@@ -78,7 +115,23 @@ pols_month_df =
                   "12" = "December"
     )
   )
+pols_month_df
 ```
+create a president column using values prez_gop and prez_dem
+```{r}
+pols_month_df %>% 
+  mutate(
+    president = ifelse(prez_gop == 1, "gop",ifelse(prez_gop == 0,"dem","special case")))
+pols_month_df
+```
+
+remove prez_gop,prez_dem and day variables
+```{r}
+pols_month_df = pols_month_df %>% 
+select(-prez_dem,-prez_gop,-day)
+pols_month_df
+```
+
 
 
 
