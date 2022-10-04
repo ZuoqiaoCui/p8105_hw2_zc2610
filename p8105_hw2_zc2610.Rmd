@@ -22,6 +22,14 @@ NYC_transit_data = read.csv("./data/NYC_Transit_Subway_Entrance_And_Exit_Data.cs
   )
 ```
 
+```{r}
+NYC_transit_data %>% 
+  distinct()
+```
+
+
+
+
 
 ## Problem 2
 
@@ -155,7 +163,12 @@ snps_df = read_csv("./data/fivethirtyeight_datasets/snp.csv") %>%
 arrange year,month and organize them to be leading columns
 ```{r}
 snps_df = snps_df %>% 
-  arrange(year,month)
+mutate(
+  year = as.integer(year),
+  year = ifelse(year < 22,year + 2000,year + 1900)
+) %>% 
+  arrange(year,month) %>% 
+  relocate(year,month)
 ```
 switch unemployment dataset from “wide” to “long” format
 ```{r}
