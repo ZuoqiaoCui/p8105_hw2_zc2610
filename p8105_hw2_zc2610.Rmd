@@ -10,6 +10,16 @@ library(tidyverse)
 library(readxl)
 library(dplyr)
 ```
+
+## Problem 1
+
+```{r}
+NYC_transit_data = read.csv("./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>% 
+  janitor::clean_names() %>% 
+  select(line,station_name,station_latitude,station_longitude,starts_with("route"),entry, exit_only, vending, entrance_type, ada)
+```
+
+
 ## Problem 2
 
 Import, clean, and organize the data for Mr Trash Wheel
@@ -153,6 +163,7 @@ unemployment_df = read_csv("./data/fivethirtyeight_datasets/unemployment.csv") %
     names_to = "month", 
     values_to = "percentage of unemployment")
 ```
+
 
 
 
