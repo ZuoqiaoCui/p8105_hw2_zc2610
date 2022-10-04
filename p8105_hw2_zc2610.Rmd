@@ -22,11 +22,6 @@ NYC_transit_data = read.csv("./data/NYC_Transit_Subway_Entrance_And_Exit_Data.cs
   )
 ```
 
-```{r}
-NYC_transit_data %>% 
-  distinct()
-```
-
 
 
 
@@ -166,7 +161,10 @@ snps_df = snps_df %>%
 mutate(
   year = as.integer(year),
   year = ifelse(year < 22,year + 2000,year + 1900)
-) %>% 
+) 
+  snps_df = mutate(snps_df,
+    year = as.character(year)
+  ) %>% 
   arrange(year,month) %>% 
   relocate(year,month)
 ```
@@ -177,8 +175,21 @@ unemployment_df = read_csv("./data/fivethirtyeight_datasets/unemployment.csv") %
   pivot_longer(
     jan:dec,
     names_to = "month", 
-    values_to = "percentage of unemployment")
+    values_to = "percentage of unemployment") %>% 
+  mutate(
+    year = as.character(year)
+  )
+
 ```
+
+merge snps dataset into pols dataset and then merge unemployment dataset into them
+
+```{r}
+snps_pols_merge = left_join(pols_month_df,snps_df,by = c("year","month"))
+merge_unemployment = left_join(snps_pols_merge,unemployment_df,by = c("year","month"))
+```
+
+
 
 
 
