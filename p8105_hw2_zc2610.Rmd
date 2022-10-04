@@ -139,6 +139,21 @@ snps_df = read_csv("./data/fivethirtyeight_datasets/snp.csv") %>%
     separate(date,into = c("month","day","year"),sep = "/")
 ```
 
+arrange year,month and organize them to be leading columns
+```{r}
+snps_df = snps_df %>% 
+  arrange(year,month)
+```
+switch unemployment dataset from “wide” to “long” format
+```{r}
+unemployment_df = read_csv("./data/fivethirtyeight_datasets/unemployment.csv") %>% 
+  janitor::clean_names() %>% 
+  pivot_longer(
+    jan:dec,
+    names_to = "month", 
+    values_to = "percentage of unemployment")
+```
+
 
 
 
