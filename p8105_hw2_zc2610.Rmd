@@ -132,6 +132,12 @@ select(-prez_dem,-prez_gop,-day)
 pols_month_df
 ```
 
+separate date into year, month, day
+```{r}
+snps_df = read_csv("./data/fivethirtyeight_datasets/snp.csv") %>% 
+  janitor::clean_names() %>% 
+    separate(date,into = c("month","day","year"),sep = "/")
+```
 
 
 
