@@ -244,7 +244,8 @@ separate date into year, month, day
 ```{r}
 snps_df = read_csv("./data/fivethirtyeight_datasets/snp.csv") %>% 
   janitor::clean_names() %>% 
-    separate(date,into = c("month","day","year"),sep = "/")
+    separate(date,into = c("month","day","year"),sep = "/") %>% 
+  select(-day)
 snps_df
 ```
 
