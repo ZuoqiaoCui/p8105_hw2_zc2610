@@ -121,6 +121,7 @@ MrTrashWheel_df =
       sports_balls = as.integer(round(sports_balls)),
       year = as.double(year)
     )
+MrTrashWheel_df
 ```
 Import, clean, and organize the data for Professor Trash Wheel
 
@@ -132,6 +133,7 @@ ProfessorTrashWheel_df =
     mutate(
       dumpster = as.character(dumpster)
     )
+ProfessorTrashWheel_df
 ```
 
 Combine two sheets
@@ -146,6 +148,7 @@ TrashWheel_tidy = bind_rows(MrTrashWheel_df,ProfessorTrashWheel_df) %>%
   mutate(
     year = as.integer(year)
   )
+TrashWheel_tidy
 ```
 Number of observations and variables in Mr Trash Wheel dataset
 ```{r}
@@ -242,6 +245,7 @@ separate date into year, month, day
 snps_df = read_csv("./data/fivethirtyeight_datasets/snp.csv") %>% 
   janitor::clean_names() %>% 
     separate(date,into = c("month","day","year"),sep = "/")
+snps_df
 ```
 
 arrange year,month and organize them to be leading columns
@@ -256,6 +260,7 @@ mutate(
   ) %>% 
   arrange(year,month) %>% 
   relocate(year,month)
+  snps_df
 ```
 switch unemployment dataset from “wide” to “long” format
 ```{r}
@@ -268,18 +273,30 @@ unemployment_df = read_csv("./data/fivethirtyeight_datasets/unemployment.csv") %
   mutate(
     year = as.character(year)
   )
-
+unemployment_df
 ```
 
 merge snps dataset into pols dataset and then merge unemployment dataset into them
-
 ```{r}
 snps_pols_merge = left_join(pols_month_df,snps_df,by = c("year","month"))
 merge_unemployment = left_join(snps_pols_merge,unemployment_df,by = c("year","month"))
+snps_pols_merge
+merge_unemployment
 ```
+illustration:
+since the requirement is merge snps into pols, I think all variables of in pols dataset are more important so that need to be reserved.Thus, I choose to use left_join. To reserve all variables, I think full_join can also be used.
 
+Description
 
+1. pols-month dataset contains variables as followed: `r colnames(pols_month_df)`. There are totally `r nrow(pols_month_df)` observations and `r ncol(pols_month_df)` variables in this dataset. The range of year is from `r min(pull(pols_month_df, year))` to `r max(pull(pols_month_df, year))`. Key variables should be year, month and president.
 
+2. snps dataset contains variables as followed: `r colnames(snps_df)`. There are totally `r nrow(snps_df)` observations and `r ncol(snps_df)` variables in this dataset. The range of year is from `r min(pull(snps_df, year))` to `r max(pull(snps_df, year))`. Key variables should be year and month.
+
+3. unemployment dataset contains variables as followed: `r colnames(unemployment_df)`. There are totally `r nrow(unemployment_df)` observations and `r ncol(unemployment_df)` variables in this dataset. The range of year is from `r min(pull(unemployment_df, year))` to `r max(pull(unemployment_df, year))`. Key variables should be year and month.
+
+4. snps_pols_merge dataset is formed by merging snps into pols. This dataset contains variables as followed: `r colnames(snps_pols_merge)`. There are totally `r nrow(snps_pols_merge)` observations and `r ncol(snps_pols_merge)` variables in this dataset. The range of year is from `r min(pull(snps_pols_merge, year))` to `r max(pull(snps_pols_merge, year))`. Key variables should be year and month since snps and pols are joined by these two variables
+
+5. merge_unemployment dataset is formed by merging unemployment into snps_pols_merge. This dataset contains variables as followed: `r colnames(merge_unemployment)`. There are totally `r nrow(merge_unemployment)` observations and `r ncol(merge_unemployment)` variables in this dataset. The range of year is from `r min(pull(merge_unemployment, year))` to `r max(pull(merge_unemployment, year))`. Key variables should be year and month since unemployment and snps_pols_merge are joined by these two variables
 
 
 
