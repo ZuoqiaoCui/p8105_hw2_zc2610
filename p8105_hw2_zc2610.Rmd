@@ -18,7 +18,11 @@ NYC_transit_data = read.csv("./data/NYC_Transit_Subway_Entrance_And_Exit_Data.cs
   janitor::clean_names() %>% 
   select(line,station_name,station_latitude,station_longitude,starts_with("route"),entry, exit_only, vending, entrance_type, ada) %>% 
   mutate(
-    entry = recode(entry,"YES" = "TRUE","NO" = "FALSE")
+    entry = recode(entry,"YES" = TRUE,"NO" = FALSE),
+    route8 = as.character(route8),
+    route9 = as.character(route9),
+    route10 = as.character(route10),
+    route11 = as.character(route11)
   )
 ```
 
@@ -32,7 +36,7 @@ Description
 
 1. There are these variables: `r colnames(NYC_transit_data)`
 
-2. The process of tidying data is to import, update variable names, and selects the columns that will be used in later parts fo this problem. Then, I update `entry` from `yes` / `no` to a logical variable.
+2. The process of tidying data is to import, update variable names, make all data type of column route to be the same: character, and selects the columns that will be used in later parts fo this problem. Then, I update `entry` from `yes` / `no` to a logical variable.
 
 3.There are totally `r nrow(NYC_transit_data)` rows and `r ncol(NYC_transit_data)` columns.
 
@@ -59,8 +63,49 @@ Description
 There are totally `r nrow(num_of_combination_ada)` distinct stations where adas are compliant
 
 
+calculate the proportion of station entrances / exits without vending allow entrance
+```{r}
+proportion = NYC_transit_data %>% 
+  filter(vending == "NO") %>% 
+  pull(entry) %>% 
+  mean
+proportion
+```
+Description
+
+The proportion of station entrances / exits without vending allow entrance is `r proportion`
+
+reform route number and route name
+calculate the number of distinct stations that serve the A train
+```{r}
+num_a = NYC_transit_data %>% 
+  pivot_longer(
+    route1:route11,
+    names_to = "route_num",
+    values_to = "route") %>% 
+  filter(route == "A") %>% 
+  select(station_name, line) %>% 
+  distinct
+```
+Description
+
+There are totally `r nrow(num_a)` distinct stations serve the A train
 
 
+calculate the number of stations that serve the A train and are ADA compliant
+```{r}
+num_a_ada = NYC_transit_data %>% 
+  pivot_longer(
+    route1:route11,
+    names_to = "route_num",
+    values_to = "route") %>% 
+  filter(route == "A", ada == TRUE) %>% 
+  select(station_name, line) %>% 
+  distinct
+```
+Description
+
+There are totally `r nrow(num_a_ada)` distinct stations that serve the A train and are ADA compliant
 
 ## Problem 2
 
@@ -179,10 +224,10 @@ pols_month_df
 ```
 create a president column using values prez_gop and prez_dem
 ```{r}
-pols_month_df %>% 
+pols_month_df = pols_month_df %>% 
   mutate(
     president = ifelse(prez_gop == 1, "gop",ifelse(prez_gop == 0,"dem","special case")))
-pols_month_df
+  pols_month_df
 ```
 
 remove prez_gop,prez_dem and day variables
